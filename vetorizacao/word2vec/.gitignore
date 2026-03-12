@@ -1,0 +1,18 @@
+# Ambiente virtual Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Modelos treinados
+*.bin
+*.pkl
+word2vec_cbow.bin
+word2vec_skipgram.bin
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

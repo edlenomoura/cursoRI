@@ -1,0 +1,17 @@
+# Ambiente virtual Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Modelos baixados
+models/
+*.bin
+*.pkl
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

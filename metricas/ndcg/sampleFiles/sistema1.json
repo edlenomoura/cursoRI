@@ -1,0 +1,49 @@
+{
+  "search_queries": [
+    {
+      "query": "melhores práticas para agricultura regenerativa",
+      "results": [
+	  { "doc_id": 4829 },
+	  { "doc_id": 7732},
+	  { "doc_id": 3190},
+          { "doc_id": 1054 }
+      
+      ]
+    },
+    {
+      "query": "como funciona a criptografia quântica",
+      "results": [
+        { "doc_id": 9921 },
+        { "doc_id": 1204},
+        { "doc_id": 8843 }
+      ]
+    },
+    {
+      "query": "receita de pão de fermentação natural",
+      "results": [
+	  { "doc_id": 1109},
+	  { "doc_id": 4412},
+	  { "doc_id": 3341},
+          { "doc_id": 6720}
+      ]
+    },
+    {
+      "query": "principais pontos turísticos de Quioto",
+      "results": [
+        { "doc_id": 2298 },
+        { "doc_id": 5541 },
+        { "doc_id": 9012 },
+        { "doc_id": 3387 }
+      ]
+    },
+    {
+      "query": "exercícios para fortalecer a lombar em casa",
+      "results": [
+        { "doc_id": 7110 },
+        { "doc_id": 1552 },
+        { "doc_id": 6678 },
+        { "doc_id": 4003 }
+      ]
+    }
+  ]
+}
