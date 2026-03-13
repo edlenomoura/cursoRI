@@ -1,0 +1,238 @@
+======================================================================
+DEMONSTRAÇÃO DE BERTIMBAU - VETORIZAÇÃO CONTEXTUALIZADA
+======================================================================
+
+BERTimbau é um modelo BERT treinado em português brasileiro
+Características:
+  • Vetores contextualizados (mesma palavra = diferentes vetores)
+  • ~110 milhões de parâmetros
+  • Vetores de 768 dimensões
+======================================================================
+
+Texto original:
+
+O direito é a garantia da justiça social.
+A justiça deve ser acessível a todos os cidadãos.
+O tribunal analisa cada caso com atenção.
+A lei protege os direitos fundamentais.
+Os advogados defendem a justiça e os direitos.
+
+
+======================================================================
+PASSO 1: PREPARAÇÃO DAS SENTENÇAS
+======================================================================
+Total de sentenças: 5
+  1. O direito é a garantia da justiça social.
+  2. A justiça deve ser acessível a todos os cidadãos.
+  3. O tribunal analisa cada caso com atenção.
+  4. A lei protege os direitos fundamentais.
+  5. Os advogados defendem a justiça e os direitos.
+
+======================================================================
+PASSO 2: CARREGANDO O MODELO BERTIMBAU
+======================================================================
+Aguarde... Este passo pode demorar na primeira execução.
+(O modelo será baixado automaticamente - ~400MB)
+
+✓ Tokenizador carregado: neuralmind/bert-base-portuguese-cased
+✓ Modelo carregado: neuralmind/bert-base-portuguese-cased
+  - Parâmetros: ~110 milhões
+  - Dimensão dos vetores: 768
+
+======================================================================
+PASSO 3: TOKENIZAÇÃO COM BERTIMBAU
+======================================================================
+BERT usa tokenização em subpalavras (WordPiece):
+Palavras podem ser divididas em pedaços menores
+
+Sentença: 'O direito é a garantia da justiça social.'
+Tokens: ['O', 'direito', 'é', 'a', 'garantia', 'da', 'justiça', 'social', '.']
+Total de tokens: 9
+
+Tokens especiais:
+  [CLS] - Token especial no início (representa a sentença toda)
+  [SEP] - Token especial no fim (separador)
+
+======================================================================
+PASSO 4: GERANDO VETORES CONTEXTUALIZADOS
+======================================================================
+Processando cada sentença e extraindo seus vetores...
+
+[1/5] Processando: 'O direito é a garantia da justiça social.'
+    Tokens de entrada: 11
+    Vetor [CLS] (primeiras 10 dims): [ 0.2233977   0.34631523  0.50018525  0.11776287  0.12236584  0.25604707
+ -0.0947262  -0.41190127  0.2451564   0.5971967 ]
+    Forma do vetor completo: (768,)
+
+[2/5] Processando: 'A justiça deve ser acessível a todos os cidadãos.'
+    Tokens de entrada: 12
+    Vetor [CLS] (primeiras 10 dims): [ 0.23835844  0.08405583  0.5282749   0.17589876  0.00987247  0.31352934
+  0.07528193 -0.27572072  0.4196202   0.47765145]
+    Forma do vetor completo: (768,)
+
+[3/5] Processando: 'O tribunal analisa cada caso com atenção.'
+    Tokens de entrada: 11
+    Vetor [CLS] (primeiras 10 dims): [0.20455426 0.15468171 0.4310739  0.02489976 0.04259312 0.1288186
+ 0.31811464 0.03475122 0.19254798 0.74910355]
+    Forma do vetor completo: (768,)
+
+[4/5] Processando: 'A lei protege os direitos fundamentais.'
+    Tokens de entrada: 9
+    Vetor [CLS] (primeiras 10 dims): [ 0.13915887  0.45328626  0.49784794  0.17298803  0.37015197  0.30114552
+  0.13653433 -0.11898562  0.34369072  0.6565556 ]
+    Forma do vetor completo: (768,)
+
+[5/5] Processando: 'Os advogados defendem a justiça e os direitos.'
+    Tokens de entrada: 11
+    Vetor [CLS] (primeiras 10 dims): [-0.13453637  0.5743609   0.34109375 -0.1825791   0.24374732  0.37468228
+  0.23268422 -0.35455394  0.4654715   0.47189364]
+    Forma do vetor completo: (768,)
+
+======================================================================
+PASSO 5: ANÁLISE DOS VETORES GERADOS
+======================================================================
+
+Resumo da vetorização:
+  - Total de sentenças vetorizadas: 5
+  - Dimensão de cada vetor: 768
+  - Tamanho total em memória: ~15.00 KB
+
+DETALHES: Tokens e seus vetores (primeiras 5 dimensões)
+Lembre-se: BERT gera um vetor para CADA token da sentença!
+
+──────────────────────────────────────────────────────────────────────
+Sentença 1: 'O direito é a garantia da justiça social.'
+──────────────────────────────────────────────────────────────────────
+
+Total de tokens (incluindo [CLS] e [SEP]): 11
+
+  Token  0: '[CLS]          ' → Vetor (5 primeiras dims): [0.2233977  0.34631523 0.50018525 0.11776287 0.12236584]
+  Token  1: 'O              ' → Vetor (5 primeiras dims): [0.5891954  0.12149151 0.6604308  0.47109947 0.09819921]
+  Token  2: 'direito        ' → Vetor (5 primeiras dims): [-0.07853943  0.04311675  0.32518122  0.20492926 -0.21851757]
+  Token  3: 'é              ' → Vetor (5 primeiras dims): [0.3353402  0.13951254 0.5948259  0.07794449 0.4243402 ]
+  Token  4: 'a              ' → Vetor (5 primeiras dims): [0.12616825 0.20404568 0.92005265 0.67096305 0.7136435 ]
+  Token  5: 'garantia       ' → Vetor (5 primeiras dims): [-0.3127017   0.17762646  0.29483038  0.10505936  0.68503183]
+  Token  6: 'da             ' → Vetor (5 primeiras dims): [-0.16745633  0.27151042  0.406237    0.33027846  0.4754422 ]
+  Token  7: 'justiça        ' → Vetor (5 primeiras dims): [-0.12383613 -0.0345359  -0.44917414  0.02561074  0.2348058 ]
+  Token  8: 'social         ' → Vetor (5 primeiras dims): [ 0.00530904 -0.42080408  0.18844083  0.18867841  0.30855414]
+  Token  9: '.              ' → Vetor (5 primeiras dims): [ 0.06967562 -0.02064341  0.4205193   0.19066036  0.09380728]
+  Token 10: '[SEP]          ' → Vetor (5 primeiras dims): [0.22385779 0.34668946 0.50181353 0.11774056 0.12157757]
+
+  💡 Cada um desses 11 tokens tem 768 dimensões!
+  💡 Os vetores dependem do CONTEXTO da sentença
+
+──────────────────────────────────────────────────────────────────────
+Sentença 2: 'A justiça deve ser acessível a todos os cidadãos.'
+──────────────────────────────────────────────────────────────────────
+
+Total de tokens (incluindo [CLS] e [SEP]): 12
+
+  Token  0: '[CLS]          ' → Vetor (5 primeiras dims): [0.23835844 0.08405583 0.5282749  0.17589876 0.00987247]
+  Token  1: 'A              ' → Vetor (5 primeiras dims): [ 0.3061681  -0.14631116  0.73054165  0.5267233  -0.05310195]
+  Token  2: 'justiça        ' → Vetor (5 primeiras dims): [ 0.09738598 -0.20405668 -0.29934815  0.02413222 -0.12142064]
+  Token  3: 'deve           ' → Vetor (5 primeiras dims): [ 0.04237203 -0.06392609  0.32462853  0.20880201 -0.05423074]
+  Token  4: 'ser            ' → Vetor (5 primeiras dims): [ 0.12115272 -0.08736087 -0.0752036   0.21841103  0.08606326]
+  Token  5: 'acessível      ' → Vetor (5 primeiras dims): [ 0.1491616  -0.45122007  0.58393633  0.05047464 -0.0127745 ]
+  Token  6: 'a              ' → Vetor (5 primeiras dims): [ 0.23145992 -0.45443997  0.7210232   0.14507776  0.29750758]
+  Token  7: 'todos          ' → Vetor (5 primeiras dims): [-0.08580542 -0.3483516   0.26138362  0.06380482  0.05909871]
+  Token  8: 'os             ' → Vetor (5 primeiras dims): [ 0.00650622 -0.06095807  0.13045439  0.29310963  0.263972  ]
+  Token  9: 'cidadãos       ' → Vetor (5 primeiras dims): [-0.31690437 -0.02806192  0.12741053  0.04986816  0.05373608]
+  Token 10: '.              ' → Vetor (5 primeiras dims): [ 0.08663508 -0.09385136  0.27390566  0.2076303   0.0583643 ]
+  Token 11: '[SEP]          ' → Vetor (5 primeiras dims): [0.23873428 0.08431763 0.53008926 0.17595297 0.00933018]
+
+  💡 Cada um desses 12 tokens tem 768 dimensões!
+  💡 Os vetores dependem do CONTEXTO da sentença
+
+──────────────────────────────────────────────────────────────────────
+
+
+======================================================================
+PASSO 6: SIMILARIDADE ENTRE SENTENÇAS
+======================================================================
+Calculando similaridade de cosseno entre pares de sentenças:
+
+Sentença 1 vs Sentença 2: 0.9024
+  [1] O direito é a garantia da justiça social....
+  [2] A justiça deve ser acessível a todos os cidadãos....
+
+Sentença 1 vs Sentença 3: 0.7568
+  [1] O direito é a garantia da justiça social....
+  [3] O tribunal analisa cada caso com atenção....
+
+Sentença 1 vs Sentença 4: 0.9104
+  [1] O direito é a garantia da justiça social....
+  [4] A lei protege os direitos fundamentais....
+
+Sentença 1 vs Sentença 5: 0.8416
+  [1] O direito é a garantia da justiça social....
+  [5] Os advogados defendem a justiça e os direitos....
+
+Sentença 2 vs Sentença 3: 0.7699
+  [2] A justiça deve ser acessível a todos os cidadãos....
+  [3] O tribunal analisa cada caso com atenção....
+
+Sentença 2 vs Sentença 4: 0.8500
+  [2] A justiça deve ser acessível a todos os cidadãos....
+  [4] A lei protege os direitos fundamentais....
+
+Sentença 2 vs Sentença 5: 0.8139
+  [2] A justiça deve ser acessível a todos os cidadãos....
+  [5] Os advogados defendem a justiça e os direitos....
+
+Sentença 3 vs Sentença 4: 0.7525
+  [3] O tribunal analisa cada caso com atenção....
+  [4] A lei protege os direitos fundamentais....
+
+Sentença 3 vs Sentença 5: 0.7280
+  [3] O tribunal analisa cada caso com atenção....
+  [5] Os advogados defendem a justiça e os direitos....
+
+Sentença 4 vs Sentença 5: 0.8403
+  [4] A lei protege os direitos fundamentais....
+  [5] Os advogados defendem a justiça e os direitos....
+
+======================================================================
+PASSO 7: WORD2VEC vs BERTIMBAU - PRINCIPAIS DIFERENÇAS
+======================================================================
+
+┌─────────────────┬──────────────────────┬──────────────────────────┐
+│ Característica  │ Word2Vec             │ BERTimbau                │
+├─────────────────┼──────────────────────┼──────────────────────────┤
+│ Tipo de vetor   │ Estático             │ Contextualizado          │
+│                 │ (mesma palavra =     │ (mesma palavra pode ter  │
+│                 │  mesmo vetor)        │  vetores diferentes)     │
+├─────────────────┼──────────────────────┼──────────────────────────┤
+│ Dimensões       │ 50-300 (configurável)│ 768 (BERT base)          │
+├─────────────────┼──────────────────────┼──────────────────────────┤
+│ Treinamento     │ Rápido, corpus       │ Pré-treinado em grande   │
+│                 │ específico           │ corpus, pronto para uso  │
+├─────────────────┼──────────────────────┼──────────────────────────┤
+│ Corpus mínimo   │ Milhares de sentenças│ Não precisa (já treinado)│
+├─────────────────┼──────────────────────┼──────────────────────────┤
+│ Uso de recursos │ Leve (~MB)           │ Pesado (~400MB + RAM)    │
+├─────────────────┼──────────────────────┼──────────────────────────┤
+│ Velocidade      │ Muito rápido         │ Mais lento (milhares de  │
+│                 │                      │ operações por sentença)  │
+├─────────────────┼──────────────────────┼──────────────────────────┤
+│ Melhor para     │ - Tarefas simples    │ - Tarefas complexas      │
+│                 │ - Similaridade       │ - Classificação          │
+│                 │ - Clustering         │ - Q&A, NER, etc.         │
+└─────────────────┴──────────────────────┴──────────────────────────┘
+
+
+EXEMPLO DE CONTEXTUALIZAÇÃO:
+Palavra 'banco' no Word2Vec: sempre o mesmo vetor
+Palavra 'banco' no BERT:
+  'Sentei no banco da praça' → vetor A (mobiliário)
+  'Fui ao banco sacar dinheiro' → vetor B (instituição)
+  A ≠ B (vetores diferentes baseados no contexto!)
+
+======================================================================
+DEMONSTRAÇÃO CONCLUÍDA!
+======================================================================
+
+NOTAS IMPORTANTES:
+- BERTimbau captura nuances contextuais que Word2Vec não consegue
+- Requer mais recursos computacionais (CPU/GPU, RAM)
+- Ideal para tarefas de NLP complexas em português brasileiro
+- Não requer treinamento adicional (já vem pré-treinado)

@@ -121,12 +121,17 @@ vetores_sentencas = []
 
 # Desabilita o cálculo de gradientes (não estamos treinando, apenas inferindo)
 # Isso economiza memória e torna o processamento mais rápido
+# se fosse fine-tunning, ai teríamos que calcular os gradientes, mas como só queremos os vetores, não precisamos disso
+# se fosse calcular os gradientes, teríamos que usar o modelo em modo de treinamento (modelo.train()) e não desabilitar os gradientes
 with torch.no_grad():
     for i, sentenca in enumerate(sentencas, 1):
         print(f"[{i}/{len(sentencas)}] Processando: '{sentenca}'")
         
         # Tokeniza a sentença e converte para formato aceito pelo modelo
         # return_tensors='pt' retorna tensores do PyTorch
+        # outras alternativas para return_tensors poderiam 
+        # ser 'tf' para TensorFlow ou 'np' para NumPy, mas 
+        # aqui usamos PyTorch
         # (*Tensores são objetos matemáticos que generalizam conceitos 
         # de escalares, vetores e matrizes para dimensões superiores (arranjos multidimensionais de números). 
         # . Pense neles como matrizes e vetores aqui)
@@ -136,7 +141,9 @@ with torch.no_grad():
             return_tensors='pt',     # Retorna tensores PyTorch
             padding=True,            # Adiciona padding se necessário
             truncation=True,         # Trunca se passar do tamanho máximo (512 tokens)
-            max_length=512           # Tamanho máximo de entrada do BERT
+            max_length=512           # Tamanho máximo de entrada do BERT, esse valor é em número de tokens 
+                                     # da sentença, não é o número de palavras, porque o BERT pode dividir 
+                                    # palavras em subpalavras (tokens) 
         )
         
         # Passa os inputs pelo modelo BERT
