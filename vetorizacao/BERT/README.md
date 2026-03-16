@@ -119,3 +119,207 @@ pip install torch --index-url https://download.pytorch.org/whl/cu118
 ❌ Mais lento (segundos vs milissegundos)  
 ❌ Requer mais memória (~400MB vs ~MB)  
 ❌ Maior complexidade computacional  
+
+---
+
+# 🚀 INTEGRAÇÃO COM ELASTICSEARCH
+
+Esta seção documenta os scripts de **busca semântica** usando BERTimbau com ElasticSearch.
+
+## 📁 Novos Arquivos
+
+- **`indexaBertimbauElastic.py`**: Indexa documentos com embeddings do BERTimbau
+- **`buscaBertimbauElastic.py`**: Busca semântica em 3 modos (kNN, Script Score, Híbrido)
+
+## 🧠 Busca Semântica vs Léxica
+
+### Busca Léxica (BM25, TF-IDF)
+- Correspondência **exata** de palavras
+- "carro" **não encontra** "automóvel"
+- Rápida, mas limitada
+
+### Busca Semântica (BERT)
+- Baseada em **similaridade de significado**
+- "carro" ≈ "automóvel" ≈ "veículo"
+- Entende sinônimos, contexto, paráfrases
+
+## 🏃 Início Rápido - Busca Semântica
+
+### 1. Iniciar ElasticSearch
+
+```bash
+cd ../../BasicIRModelsWithElasticSearch/BM25
+./initElastic.sh
+```
+
+### 2. Indexar com embeddings
+
+```bash
+python indexaBertimbauElastic.py
+```
+
+**O que faz:**
+1. Carrega BERTimbau
+2. Lê `../../dataSetExemplo/exEmentas.json`
+3. Gera embeddings usando **token [CLS]**
+4. Para textos longos (>512 tokens):
+   - Divide em chunks de 500 tokens
+   - Extrai CLS de cada chunk
+   - Calcula **média dos embeddings**
+5. Indexa como `dense_vector` (768 dimensões)
+
+**Tempo:** ~5-10 minutos
+
+### 3. Buscar semanticamente
+
+```bash
+python buscaBertimbauElastic.py
+```
+
+**Demonstra 3 tipos de busca:**
+1. **kNN** - k-Nearest Neighbors (rápido, aproximado)
+2. **Script Score** - Similaridade cosseno exata
+3. **Híbrido** - Combina BM25 + BERT
+
+## 🎯 Estratégia de Embeddings
+
+### Token [CLS] para Sentenças
+
+```
+[CLS] Este é um texto [SEP]
+  ↑
+  └─ Representa toda a sentença (768 dims)
+```
+
+### Documentos Longos (>512 tokens)
+
+```
+Documento grande (2000 tokens)
+    ↓
+Dividir em chunks (500 tokens)
+    ↓
+chunk1 → [CLS] embed1
+chunk2 → [CLS] embed2
+chunk3 → [CLS] embed3
+chunk4 → [CLS] embed4
+    ↓
+embedding_final = média(embed1, embed2, embed3, embed4)
+```
+
+## 📊 Tipos de Busca
+
+### 1. kNN (k-Nearest Neighbors)
+
+```python
+# Rápido, aproximado, ideal para produção
+busca_knn(es, consulta_embedding, k=10)
+```
+
+- ✅ Muito rápido (usa índice HNSW)
+- ⚠️ Aproximado (não exato)
+- ✅ Escalável para milhões de docs
+
+### 2. Script Score
+
+```python
+# Exato, permite filtros
+busca_script_score(es, consulta_embedding)
+```
+
+- ✅ Cosseno exato
+- ✅ Combina com filtros
+- ⚠️ Mais lento
+
+### 3. Híbrido (BM25 + BERT)
+
+```python
+# Melhor dos dois mundos
+busca_hibrida(es, texto, embedding, peso_lexico=0.5)
+```
+
+- ✅ Keywords exatas + significado
+- ✅ Resultados superiores
+- 📊 Ajuste pesos conforme caso
+
+## 📈 Exemplo Comparativo
+
+```
+Consulta: "veículo automotor"
+
+BM25 (Léxica):
+  ✅ "veículo automotor"
+  ✅ "veículo de transporte"  
+  ❌ "automóvel usado" (não tem "veículo")
+
+BERT (Semântica):
+  ✅ "veículo automotor"
+  ✅ "automóvel usado" (entende sinônimo)
+  ✅ "carro particular" (conceito similar)
+```
+
+## 🎓 Quando Usar?
+
+| Cenário | Recomendação |
+|---------|-------------|
+| Nomes próprios | BM25 |
+| Termos técnicos exatos | BM25 |
+| Sinônimos | BERT |
+| Conceitos abstratos | BERT |
+| Queries complexas | BERT |
+| **Produção geral** | **Híbrido (50/50)** |
+
+## ⚙️ Configurações
+
+### indexaBertimbauElastic.py
+
+```python
+MAX_TOKENS_PER_CHUNK = 500  # Chunks para docs longos
+campos_embedding = ['title', 'highlight']  # Campos indexados
+EMBEDDING_DIMS = 768  # BERT base
+```
+
+### buscaBertimbauElastic.py
+
+```python
+k = 10  # Resultados kNN
+num_candidates = 100  # Trade-off velocidade/qualidade
+peso_lexico = 0.5  # Híbrido: 0.0=só BERT, 1.0=só BM25
+```
+
+## 🔧 Troubleshooting
+
+### "CUDA out of memory"
+
+```python
+device = "cpu"  # Forçar CPU
+```
+
+### Busca lenta
+
+1. Use **kNN** ao invés de Script Score
+2. Aumente `num_candidates` gradualmente
+3. Cache queries frequentes
+
+### Resultados ruins
+
+1. Ajuste `peso_lexico` na busca híbrida
+2. Teste campos: `embedding_title` vs `embedding_highlight`
+3. BERTimbau é específico para **português**
+
+## 📚 Referências ElasticSearch
+
+- [Dense Vectors](https://www.elastic.co/guide/en/elasticsearch/reference/current/dense-vector.html)
+- [kNN Search](https://www.elastic.co/guide/en/elasticsearch/reference/current/knn-search.html)
+- [Script Score](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-script-score-query.html)
+
+## 🎓 Exercícios
+
+1. Compare busca "veículo" vs "carro"
+2. Execute mesma query em índices BM25 e BERT
+3. Ajuste pesos hibridos: teste 0.3, 0.5, 0.7
+4. Teste queries em linguagem natural
+5. Compare campos `title` vs `highlight`
+
+---
+
+**Para mais detalhes**, veja os comentários extensivos nos scripts Python!

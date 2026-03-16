@@ -14,3 +14,14 @@ numpy>=1.24.0,<2.0.0
 # Restrições de versão para compatibilidade com streamlit 1.30.0
 packaging<24,>=16.8
 protobuf<5,>=3.20
+
+# ===== ELASTICSEARCH =====
+# Cliente Python para ElasticSearch
+# IMPORTANTE: versão 8.x para compatibilidade com ES 8.13.4
+# Versão 9.x NÃO é compatível com ES 8.x
+elasticsearch>=8.0.0,<8.14.0
+
+# ===== UTILS =====
+# Barras de progresso para indexação
+tqdm>=4.65.0
+

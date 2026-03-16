@@ -1,0 +1,16 @@
+Looking in indexes: https://edlenomoura:****@nexus.apps.jusbr.com/repository/pypi-all/simple
+Collecting elasticsearch
+  Using cached https://nexus.apps.jusbr.com/repository/pypi-all/packages/elasticsearch/9.1.3/elasticsearch-9.1.3-py3-none-any.whl (948 kB)
+Requirement already satisfied: tqdm in ./venv/lib/python3.9/site-packages (4.67.3)
+Collecting elastic-transport<10,>=9.1.0 (from elasticsearch)
+  Using cached https://nexus.apps.jusbr.com/repository/pypi-all/packages/elastic-transport/9.1.0/elastic_transport-9.1.0-py3-none-any.whl (65 kB)
+Collecting python-dateutil (from elasticsearch)
+  Using cached https://nexus.apps.jusbr.com/repository/pypi-all/packages/python-dateutil/2.9.0.post0/python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Requirement already satisfied: typing-extensions in ./venv/lib/python3.9/site-packages (from elasticsearch) (4.15.0)
+Requirement already satisfied: urllib3<3,>=1.26.2 in ./venv/lib/python3.9/site-packages (from elastic-transport<10,>=9.1.0->elasticsearch) (2.6.3)
+Requirement already satisfied: certifi in ./venv/lib/python3.9/site-packages (from elastic-transport<10,>=9.1.0->elasticsearch) (2026.2.25)
+Collecting six>=1.5 (from python-dateutil->elasticsearch)
+  Using cached https://nexus.apps.jusbr.com/repository/pypi-all/packages/six/1.17.0/six-1.17.0-py2.py3-none-any.whl (11 kB)
+Installing collected packages: six, elastic-transport, python-dateutil, elasticsearch
+
+Successfully installed elastic-transport-9.1.0 elasticsearch-9.1.3 python-dateutil-2.9.0.post0 six-1.17.0
