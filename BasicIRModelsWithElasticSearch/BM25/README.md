@@ -5,6 +5,8 @@ Este diretório contém scripts para indexação e busca de ementas jurídicas u
 ## Arquivos
 
 - **initElastic.sh** - Script shell para iniciar Docker e ElasticSearch automaticamente
+- **initElasticWindows.ps1** - Script PowerShell para iniciar Docker e ElasticSearch automaticamente no Windows
+- **initElasticWindows.cmd** - Wrapper para executar o script PowerShell no Windows
 - **indexa.py** - Script para indexar ementas no ElasticSearch
 - **busca.py** - Script de exemplo com diferentes tipos de buscas BM25
 - **requirements.txt** - Dependências Python
@@ -14,8 +16,29 @@ Este diretório contém scripts para indexação e busca de ementas jurídicas u
 ```bash
 cd BasicIRModelsWithElasticSearch/BM25
 
-# 1. Iniciar Docker e ElasticSearch (automático)
+# 1. Iniciar Docker e ElasticSearch (Linux/macOS)
 ./initElastic.sh
+
+# 2. Instalar dependências Python (primeira vez)
+pip install -r requirements.txt
+
+# 3. Indexar documentos
+python indexa.py
+
+# 4. Executar buscas de exemplo
+python busca.py
+```
+
+### Windows (PowerShell)
+
+```powershell
+cd BasicIRModelsWithElasticSearch/BM25
+
+# 1. Iniciar Docker e ElasticSearch (automático)
+.\initElasticWindows.ps1
+
+# Alternativa: usar o wrapper .cmd
+.\initElasticWindows.cmd
 
 # 2. Instalar dependências Python (primeira vez)
 pip install -r requirements.txt
@@ -46,6 +69,15 @@ pip install elasticsearch
 
 ```bash
 ./initElastic.sh
+```
+
+No Windows PowerShell:
+
+```powershell
+.\initElasticWindows.ps1
+
+# ou
+.\initElasticWindows.cmd
 ```
 
 Este script:
@@ -244,6 +276,9 @@ curl -X GET "http://localhost:9200/ementes/_search?pretty" -H 'Content-Type: app
 # Usando o script (recomendado)
 ./initElastic.sh
 
+# No Windows PowerShell
+.\initElasticWindows.ps1
+
 # Ou manualmente via Docker
 docker start elasticsearch
 
@@ -290,13 +325,13 @@ brew services restart elastic/tap/elasticsearch-full
 ```
 Error: Cannot connect to the Docker daemon at unix:///var/run/docker.sock
 ```
-**Solução**: Execute `./initElastic.sh` (inicia automaticamente) ou abra o Docker Desktop manualmente.
+**Solução**: No Linux/macOS, execute `./initElastic.sh`. No Windows PowerShell, execute `.\initElasticWindows.ps1` ou `.\initElasticWindows.cmd`. Também é possível abrir o Docker Desktop manualmente.
 
 ### ElasticSearch não está rodando
 ```
 Erro: Erro ao conectar ao ElasticSearch
 ```
-**Solução**: Execute `./initElastic.sh` ou inicie manualmente com `docker start elasticsearch`.
+**Solução**: No Linux/macOS, execute `./initElastic.sh`. No Windows PowerShell, execute `.\initElasticWindows.ps1` ou `.\initElasticWindows.cmd`. Alternativamente, inicie manualmente com `docker start elasticsearch`.
 
 ### Arquivo JSON não encontrado
 ```
