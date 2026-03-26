@@ -22,7 +22,7 @@ BM25 considera:
 - IDF (Inverse Document Frequency): raridade do termo no corpus
 - Document Length: normalização pelo tamanho do documento
 
-Score mais alto = documento mais relevante para a consulta
+Score mais alto = espera-se que o documento seja mais relevante para a consulta
 
 ================================================================================
 """
@@ -59,7 +59,7 @@ def busca_simples(es, consulta, tamanho=10):
     1. A consulta é analisada (tokenizada, lowercase, stopwords removidas)
     2. Os tokens são buscados no campo especificado
     3. Documentos que contêm qualquer um dos tokens são retornados
-    4. Score (relevância) é calculado usando BM25
+    4. Score (estimativa de relevância) é calculado usando BM25
     
     EXEMPLO:
     Consulta: "responsabilidade civil danos morais"
@@ -135,7 +135,7 @@ def busca_multi_campo(es, consulta, tamanho=10):
                     'fields': ['title^2', 'highlight', 'judging_organ'],
                     
                     # Estratégia de combinação de scores
-                    'type': 'best_fields'  # Usa score do melhor campo
+                    'type': 'best_fields'  # Usa score do melhor campo (prefiro o cross_fields)
                 }
             },
             'size': tamanho
@@ -343,17 +343,17 @@ def exibir_resultados(resposta):
             'max_score': maior_score,  # Maior relevância
             'hits': [  # Lista de documentos encontrados
                 {
-                    '_score': relevância,  # Score BM25 (quanto maior, mais relevante)
+                    '_score': relevância,  # Score BM25 (quanto maior, mais espera-se que seja relevante)
                     '_source': {...}  # Documento completo
                 }
             ]
         }
     }
     
-    SCORE (Relevância):
+    SCORE (estimativa de Relevância):
     - Calculado pelo algoritmo BM25
     - Não tem valor máximo fixo
-    - Valores maiores = mais relevante
+    - Valores maiores = espera-se que seja mais relevante
     - Usado para ordenar resultados
     
     Args:
@@ -380,7 +380,7 @@ def exibir_resultados(resposta):
     # enumerate adiciona contador começando em 1
     for i, hit in enumerate(hits['hits'], 1):
         # SCORE: relevância calculada pelo BM25
-        # Quanto maior, mais relevante o documento para a consulta
+        # Quanto maior, mais espera-se que seja relevante o documento para a consulta
         score = hit['_score']
         
         # _source: documento original (todos os campos)
@@ -518,7 +518,7 @@ def main():
         print("\nPRÓXIMOS PASSOS:")
         print("  1. Modifique as consultas acima e observe as diferenças nos resultados")
         print("  2. Experimente criar novas buscas combinando os tipos aprendidos")
-        print("  3. Analise os scores: por que alguns documentos são mais relevantes?")
+        print("  3. Analise os scores: por que alguns documentos têm scores maiores que outros ?")
         print("  4. Teste com suas próprias consultas relacionadas aos seus dados")
         print()
         print("RECURSOS ÚTEIS:")

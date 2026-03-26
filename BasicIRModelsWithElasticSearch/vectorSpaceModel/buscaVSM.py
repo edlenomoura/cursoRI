@@ -16,24 +16,28 @@ multidimensional. A similaridade é medida pela fórmula TF-IDF.
 
 IMPLEMENTAÇÃO NO ES 8.x+:
 Como o ES 8.x removeu similarity "classic", implementamos TF-IDF via
-SCRIPTED SIMILARITY usando código Painless que calcula:
-
+SCRIPTED SIMILARITY usando código Painless* que calcula:
+*O
+Painless é a linguagem de script padrão projetada especificamente para o Elasticsearch. 
+Introduzido na versão 5.0, ele substituiu outras linguagens de script. Em geral 
+você não vai precisar dele. Usamos aqui pra implementar uma formula parecida com a do VSM, 
+que não é mais suportado pelo elasticSearch desde a versão 7. 
 1. TF (Term Frequency):
    - tf = √(freq)
-   - Raiz quadrada da frequência do termo
+   - Raiz quadrada da frequência do termo. Veja que poderia ter usado a freq diretamente
    - Suaviza impacto de repetições
 
 2. IDF (Inverse Document Frequency):
-   - idf = log((docCount + 1) / (docFreq + 1)) + 1
+   - idf = log((docCount + 1) / (docFreq + 1)) + 1  # esses +1s são pra evitar zeros na conta
    - Mede raridade do termo no corpus
    - Termos raros têm maior peso
 
 3. Normalização:
-   - norm = 1 / √(length)
+   - norm = 1 / √(length)  (note que a norma aqui é uma aproximação simples, não a norma completa da fórmula. )
    - Ajusta pelo tamanho do documento
 
 4. Score Final:
-   - score = query.boost × tf × idf × norm
+   - score = query.boost × tf × idf × norm  (nossa norma foi criada pra ser 1/√(length)), por isso tá multiplicando ao invés de dividindo
 
 COMPARAÇÃO COM BM25:
 
@@ -470,7 +474,7 @@ def main():
         print("  5. Modifique o script Painless para experimentar variações")
         print()
         print("📚 PARA ENTENDER MELHOR:")
-        print("  - TF-IDF (Salton, 1971): https://en.wikipedia.org/wiki/Tf%E2%80%93idf")
+        print("  - TF-IDF (Salton, 1971): https://en.wikipedia.org/wiki/Tf-idf")
         print("  - Vector Space Model: https://en.wikipedia.org/wiki/Vector_space_model")
         print("  - Scripted Similarity: https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-similarity.html")
         
