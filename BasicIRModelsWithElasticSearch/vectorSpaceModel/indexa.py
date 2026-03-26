@@ -22,21 +22,21 @@ COMPONENTES:
 
 1. TF (Term Frequency):
    tf = √(freq)
-   - Raiz quadrada da frequência do termo no documento
+   - Raiz quadrada da frequência do termo no documento (poderia ser a frequencia direto)
    - Suaviza o impacto de repetições
 
 2. IDF (Inverse Document Frequency):
-   idf = log((numDocs + 1) / (docFreq + 1)) + 1
+   idf = log((numDocs + 1) / (docFreq + 1)) + 1 (somando 1s pra evitar contas com zeros)
    - Logaritmo do inverso da frequência em documentos
    - Termos raros têm maior peso
 
 3. Normalização:
-   norm = 1 / √(numTerms)
+   norm = 1 / √(numTerms)    (norma aproximada, Não é a da fórmula completa)
    - Ajusta pelo tamanho do documento
    - Evita bias para documentos longos
 
 4. Score Final:
-   score = Σ(TF × IDF × queryNorm × fieldNorm)
+   score = Σ(TF × IDF × queryNorm × fieldNorm)   (norma multiplicando porque já foi criada invertida (1/..))
    - Soma dos produtos TF-IDF para cada termo da consulta
 
 IMPLEMENTAÇÃO NO ES 8.x+:
@@ -131,14 +131,14 @@ def criar_indice_tfidf(es, nome_indice='ementas_tfidf'):
         
         // TF-IDF Clássico de Salton:
         
-        // 1. TF (Term Frequency) - raiz quadrada da frequência
+        // 1. TF (Term Frequency) - raiz quadrada da frequência (poderia ser log ou a fre direta)
         double tf = Math.sqrt(doc.freq);
         
         // 2. IDF (Inverse Document Frequency)
-        double idf = Math.log((field.docCount + 1.0) / (term.docFreq + 1.0)) + 1.0;
+        double idf = Math.log((field.docCount + 1.0) / (term.docFreq + 1.0)) + 1.0; //(somando 1s pra evitar contas com zeros)
         
         // 3. Normalização por comprimento do documento
-        double norm = 1.0 / Math.sqrt(doc.length);
+        double norm = 1.0 / Math.sqrt(doc.length);  // (norma não é a da fórmula do vetorial. Apenas uma aproximação simples. NOte que já está invertida)
         
         // 4. Score final: TF × IDF × norm × query.boost
         return query.boost * tf * idf * norm;
@@ -351,11 +351,12 @@ def main():
         print(f"  - Índice TF-IDF: {NOME_INDICE} (scripted similarity)")
         print(f"  - Índice BM25: ementas (similarity padrão)")
         print()
-        print("FÓRMULA TF-IDF IMPLEMENTADA:")
-        print("  tf = √(freq)")
-        print("  idf = log((docCount + 1) / (docFreq + 1)) + 1")
-        print("  norm = 1 / √(length)")
-        print("  score = query.boost × tf × idf × norm")
+        print("FÓRMULA do VSM (TF-IDF) IMPLEMENTADA:")
+        print("VERSÕES ATUAIS DO ELASTIC NÃO IMPLEMENTAM MAIS VSM. AQUI APENAS PARA DAR UMA IDEIA DE COMO SERIA. FIZ VÁRIAS SIMPLIFICAÇOES, NÃO É O VSM CORRETAMENTE IMPLEMENTADO:")
+        print("  tf = √(freq) (poderia ser só freq, ou log(1+freq). Experimente mudar)")
+        print("  idf = log((docCount + 1) / (docFreq + 1)) + 1 (os 1s pra evitar contas com zeros)")
+        print("  norm = 1 / √(length) (norma aproximada, não é a da fórmula completa)")
+        print("  score = query.boost × tf × idf × norm (norma multiplicando porque já foi criada invertida)")
         print()
         print("Próximos passos:")
         print("  - Execute 'python buscaVSM.py' para ver buscas com TF-IDF")
