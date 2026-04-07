@@ -16,6 +16,12 @@ import torch
 # Importa numpy para manipulação de arrays numéricos
 import numpy as np
 
+# Importa warnings para suprimir avisos
+import warnings
+
+# Suprimir warning de resume_download deprecated
+warnings.filterwarnings("ignore", message=".*resume_download.*", category=FutureWarning)
+
 print("=" * 70)
 print("DEMONSTRAÇÃO DE BERTIMBAU - VETORIZAÇÃO CONTEXTUALIZADA")
 print("=" * 70)
